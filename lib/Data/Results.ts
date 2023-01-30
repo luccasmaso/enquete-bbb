@@ -1,5 +1,5 @@
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb'
-import { Result } from './Types'
+import { DynamoDBClient, ScanCommand, ScanOutput } from '@aws-sdk/client-dynamodb'
+import { Participant, Result, Status } from './Types'
 
 export default class Results {
   client?: DynamoDBClient
@@ -9,8 +9,8 @@ export default class Results {
       region: "us-east-1",
       credentials: {
         accessKeyId: `${process.env.ACCESS_KEY}`,
-        secretAccessKey: `${process.env.SECRET_KEY}`,
-      },
+        secretAccessKey: `${process.env.SECRET_KEY}`
+      }
     })
   }
 
@@ -20,22 +20,25 @@ export default class Results {
         TableName: "enquete-bbb-results"
       }))
   
-      const results = data.Items?.map((element) => {
-        return {
-          id: element.id.S,
-          totalVotes: parseInt(element.totalVotes.N || '0'),
-          status: element.status.S,
-          participants: element.participants.L?.map(participant => ({
-            name: participant.M?.name.S,
-            votesPercentage: parseFloat(participant.M?.votesPercentage.N || '0')
-          })),
-        }
-      }) || []
+      const results = this.mapItems(data.Items)
   
-      results
+      return results
     } catch (error) {
       return undefined
     }
   }
-  
+
+  mapItems(items?: ScanOutput["Items"]): Result[] {
+    return items?.map<Result>((element) => {
+      return {
+        id: parseInt(element.id.S!),
+        status: element.status.S as Status,
+        totalVotes: parseInt(element.totalVotes.N || '0'),
+        participants: element.participants.L?.map<Participant>(participant => ({
+          name: participant.M?.name.S!,
+          votesPercentage: parseFloat(participant.M?.votesPercentage.N || '0')
+        })) || [],
+      }
+    }) || []
+  }
 }

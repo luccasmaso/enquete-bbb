@@ -1,12 +1,13 @@
 export type Participant = {
   name: string,
-  image: string,
   votesPercentage: number
 }
 
+export type Status = 'active'|'inactive'
+
 export type Result = {
   id: number,
-  status: 'active'|'inactive',
+  status: Status,
   totalVotes: number,
   participants: Participant[],
 }
