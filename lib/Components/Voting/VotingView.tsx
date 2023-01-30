@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { cards, card, header, text, footer } from './Animations'
-import { Result } from './Types'
+import { Result } from '../../Data/Types'
 import VotingCardView from './VotingCardView'
 import MoodView from './MoodView'
 
