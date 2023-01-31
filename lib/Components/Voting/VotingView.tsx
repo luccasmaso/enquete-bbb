@@ -16,8 +16,8 @@ export default function VotingView(props: { results: Result[] }) {
               <img className='w-8 h-8 object-cover rounded-full grayscale' src='/images/robo-2.png' />
             </div>
 
-            <div className='w-10 h-10 rounded-full'>
-              <img className='w-full h-full object-cover' src='/images/globo.svg' />
+            <div className='w-12 h-12 rounded-full'>
+              <img className='w-full h-full object-cover' src='/images/camera.png' />
             </div>
 
             <div className='flex items-center gap-1'>
